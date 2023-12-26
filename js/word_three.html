@@ -12,7 +12,6 @@
     <input type="text" >
     <button>입력</button>
     <script>
-        const number = parseInt(prompt('참여자는 몇명?'), 10);
         const $button = document.querySelector('button');
         const $input = document.querySelector('input');
         const $word = document.querySelector('#word');
@@ -20,8 +19,31 @@
 
         let word;
         let newWord;
+        let number;
+
+        while(isNaN(number) || number <=0){
+            const input = prompt('참여자는 몇명인가요?')
+
+            if(input === null){
+                alert('취소되었습니다. 게임을 진행할 수 없습니다.')
+                break;
+            }
+
+            number = parseInt(input, 10);
+
+            if(isNaN(number) || number <=0){
+                alert('올바른 숫자를 입력하세요.')
+            }
+
+        }
 
         const onClickButton = () => {
+            if(newWord.length < 3 || newWord.length > 3){
+                alert('단어는 세글자여야 합니다.')
+                $input.focus();
+                return;
+            }
+
             if (!word || word[word.length - 1] === newWord[0]) {
                 word = newWord;
                 $word.textContent = word;
@@ -42,12 +64,6 @@
 
         const onInput = (event) => {
             newWord = event.target.value;
-            let word_length = newWord.length;
-            console.log(word_length)
-            if(word_length < 3){
-                alert('글자수는 세글자 입니다!');
-                $input.focus();
-            }
         }
 
         $button.addEventListener('click', onClickButton);
