@@ -22,41 +22,68 @@
 <body>
     <form id="form">
         <input name="input" placeholder="숫자 6개를 쉼표로 구분해 입력하세요.">
-        <button>추첨</button>
+        <button id="btn">추첨</button>
         <div id="result">추첨 결과는? </div>
         <div id="bonus">보너스: </div>
     </form>
 <script>
-    const $form = document.querySelector('#form');
-    const $result = document.querySelector('#result');
-    const $bonus = document.querySelector('#bonus');
+    let $form = document.querySelector('#form');
+    let $result = document.querySelector('#result');
+    let $bonus = document.querySelector('#bonus');
+    const $btn = document.getElementById('btn');
+    const $input = document.querySelector('input[name="input"]');
 
     function drewBall ($target, value) {
         const $ball = document.createElement('div');
         $ball.className = 'ball';
         $ball.textContent = value;
         $target.appendChild($ball);
-
-        if (value < 10) {
-            $ball.style.backgroundColor = 'red';
-            $ball.style.color = 'white';
-        } else if (value < 20) {
-            $ball.style.backgroundColor = 'orange';
-        } else if (value < 30) {
-            $ball.style.backgroundColor = 'yellow';
-        } else if (value < 40) {
-            $ball.style.backgroundColor = 'blue';
-            $ball.style.color = 'white';
+        colorize(value, $ball);
+    }
+    // function resetBall () {
+    //     isResult = true;
+    //     $btn.disabled = false;
+    //     $result.remove();
+    //     $bonus.remove();
+    //     $input.value = '';
+    // }
+    function colorize(number, $tag) {
+        // 공색칠
+        if (number < 10) {
+            $tag.style.backgroundColor = 'red';
+            $tag.style.color = 'white';
+        } else if (number < 20) {
+            $tag.style.backgroundColor = 'orange';
+        } else if (number < 30) {
+            $tag.style.backgroundColor = 'yellow';
+        } else if (number < 40) {
+            $tag.style.backgroundColor = 'blue';
+            $tag.style.color = 'white';
         } else {
-            $ball.style.backgroundColor = 'green';
-            $ball.style.color = 'white';
+            $tag.style.backgroundColor = 'green';
+            $tag.style.color = 'white';
         }
     }
+    // let isResult = true;
     const setTimeoutPromise = (ms) => new Promise((resolve, reject) => {
         setTimeout(resolve, ms)
+        // 추첨 중 공 못누르게
+        // if(isResult) {
+        //     $btn.disabled = true;
+        // } else {
+        //     $btn.disabled = false;
+        // }
     })
+
+    let clicked = false;
     $form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        if(clicked) {
+            return;
+        }
+        clicked = true;
+        $result.innerHTML= '추첨 결과는?'
+        $bonus.innerHTML= '보너스:'
 
         const string = event.target.input.value;
         if (!string.trim()) {
@@ -83,18 +110,16 @@
             const value = spliceArray[0];
             shuffle.push(value);
         }      
-        console.log(shuffle)
         const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
         const bonus = shuffle[6];
-        console.log(winBalls, bonus)
 
         for(let i = 0; i < 6; i++) {
             drewBall($result, winBalls[i]);
-            await setTimeoutPromise(0)
+            await setTimeoutPromise(300)
         }
 
         drewBall($bonus, bonus);
-        await setTimeoutPromise(0);
+        await setTimeoutPromise(300);
 
         let count = 0;
         myNumbers.forEach(my => {
@@ -117,8 +142,8 @@
         } else {
             alert('꽝!')
         }
+        clicked = false;
     })
 </script>
-<!-- 추첨과정에는 추첨 버튼 클릭 못하게, 추엄 끝나면 처음부터 추첨 -->
 </body>
 </html>
