@@ -74,22 +74,29 @@
 
       let message;
       if ([2, -1].includes(diff)) {
-        score += 1;
+        my_score += 1        
         message = '승리';
       } else if ([-2, 1].includes(diff)) {
-        score -= 1;
+        computer_score += 1;
         message = '패배';
       } else {
         message = '무승부';
       }
-      $score.textContent = `${message} 총: ${score}점`;
+
+      if (my_score >= 3){
+        $score.textContent = `나의 승리 ${my_score} : ${computer_score}`;
+      } else if (computer_score >= 3){
+        $score.textContent = `컴의 승리 ${my_score} : ${computer_score}`;
+      } else {
+        $score.textContent = `${message} ${my_score} : ${computer_score}`;
+        // 점수 계산 및 화면 표시
+        setTimeout(() => {
+          clickable = true;
+          clearInterval(intervalId);
+          intervalId = setInterval(changeComputerHand, 50);
+        }, 1000);
+      }
       
-      // 점수 계산 및 화면 표시
-      setTimeout(() => {
-        clickable = true;
-        clearInterval(intervalId);
-        intervalId = setInterval(changeComputerHand, 50);
-      }, 1000);
     }
   };
   $rock.addEventListener('click', clickButton);
