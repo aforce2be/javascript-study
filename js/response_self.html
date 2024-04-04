@@ -56,6 +56,13 @@
       records.push(current);
       const average = records.reduce((a, c) => a + c) / records.length;
       $result.textContent = `현재 ${current}ms, 평균: ${average}ms`;
+      const ranking = records.sort((a,b) => a-b).slice(0, 5);
+      ranking.forEach((top, index) => {
+        $result.append(
+          document.createElement('br'),
+          `${index + 1}위 : ${top}ms`
+        );
+      });
       startTime = null;
       endTime = null;
       $screen.classList.remove('now');
@@ -63,9 +70,6 @@
       $screen.textContent = '클릭해서 시작하세요';
     }
   });
-
 </script>
-<!-- 지금까지는 반응속도의 평균만 보여 주었습니다. 추가로 가장 빠른 다섯 번의 시도가 몇 초인지를 보여 주세요. 6번 이상 시도한 경우에도 상위 5개만 보여 주세요.
-힌트 로또 추첨기를 만들 때 사용한 sort 메서드를 사용합니다. sort로 배열에 5개 담아서 보여주기 -->
 </body>
 </html>
